@@ -26,10 +26,14 @@ class MyGame(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.BLACK)
+        self.set_mouse_visible(False)
 
-        self.word_angle = 0
-        self.word_view = (-1, 1, -1, 1)
-
+        self.change_angle = 0
+        self.change_bottom = 0
+        self.change_left = 0
+        self.view_bottom = 0
+        self.view_left = 0
+        
         self.circle = Circle(CENTER_W, CENTER_H)
         self.triangles_list = []
         for i in range(0,3):
@@ -67,45 +71,42 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self.circle.update(delta_time)
-        for t in self.triangles_list:
-            t.update(delta_time, self.word_angle)
+        self.view_bottom += self.change_bottom
+        self.view_left += self.change_left
+        if self.change_angle != 0:
+            self.change_angle = self.change_angle/2
 
+        self.circle.update(delta_time, self.view_left, self.view_bottom)
+        for t in self.triangles_list:
+            t.update(delta_time, self.change_angle, self.view_left, self.view_bottom)
         
+        arcade.set_viewport(self.view_left,
+                            SCREEN_WIDTH + self.view_left,
+                            self.view_bottom,
+                            SCREEN_HEIGHT + self.view_bottom)
 
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.LEFT:
-            self.word_angle -= 3
+            self.change_left = -8
         elif key == arcade.key.RIGHT:
-            self.word_angle += 3
+            self.change_left = 8
         elif key == arcade.key.UP:
-            pass
+            self.change_bottom = 8
         elif key == arcade.key.DOWN:
-            pass
-        """
-        Called whenever a key on the keyboard is pressed.
-
-        For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
-        """
-        pass
+            self.change_bottom = -8
 
     def on_key_release(self, key, key_modifiers):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
         if key == arcade.key.LEFT:
-            self.word_angle = 0
+            self.change_left = 0
         elif key == arcade.key.RIGHT:
-            self.word_angle = 0
+            self.change_left = 0
         elif key == arcade.key.UP:
-            self.word_view[0]
-            pass
+            self.change_bottom = 0
         elif key == arcade.key.DOWN:
-            pass
-        pass
+            self.change_bottom = 0
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
+        self.change_angle = delta_x
         """
         Called whenever the mouse moves.
         """

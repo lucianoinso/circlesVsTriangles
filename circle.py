@@ -16,8 +16,9 @@ class Circle:
     def setup(self):
         return self.element
 
-    def update(self, delta_time):
-        pass
+    def update(self, delta_time, left, bottom):
+        self.x = CENTER_W + left
+        self.y = CENTER_H + bottom
 
     def draw(self):
         arcade.draw_ellipse_filled(self.x, self.y, self.w, self.h, self.color)

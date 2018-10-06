@@ -21,9 +21,9 @@ class Triangle:
     def setup(self):
         pass
 
-    def update(self, delta_time, angle):
+    def update(self, delta_time, angle, left, bottom):
         self.a += 3
-        self.x, self.y = arcade.rotate_point(self.x, self.y, CENTER_W, CENTER_H, angle)
+        self.x, self.y = arcade.rotate_point(self.x, self.y, CENTER_W + left, CENTER_H + bottom, angle)
         #import ipdb; ipdb.set_trace()
 
     def draw(self):

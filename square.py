@@ -2,7 +2,7 @@ import arcade
 import win
 
 
-class Triangle:
+class Square:
     def __init__(self, x, y):
         self.x = x
         self.y = y

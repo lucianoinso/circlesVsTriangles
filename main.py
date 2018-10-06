@@ -1,6 +1,6 @@
 import arcade
 from circle import Circle, Shot
-from triangles import Triangle
+from square import Square
 import win
 
 class MyGame(arcade.Window):
@@ -10,11 +10,6 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.BLACK)
         self.set_mouse_visible(False)
         self.set_exclusive_mouse(True)
-        
-        win.WIDTH, win.HEIGHT = self.get_size()
-        win.CENTER_W = win.WIDTH/2
-        win.CENTER_H = win.HEIGHT/2
-        arcade.set_viewport(0, win.WIDTH, 0, win.HEIGHT)
 
         self.change_angle = 0
         self.change_bottom = 0
@@ -23,10 +18,10 @@ class MyGame(arcade.Window):
         self.view_left = 0
         
         self.circle = Circle(win.CENTER_W, win.CENTER_H)
-        self.triangles_list = []
+        self.square_list = []
         for i in range(0,3):
-            triangle = Triangle(i*300+150, i*300+150)
-            self.triangles_list.append(triangle)
+            square = Square(i*300+150, i*300+150)
+            self.square_list.append(square)
 
     def setup(self):
         pass
@@ -37,7 +32,7 @@ class MyGame(arcade.Window):
         """
         arcade.start_render()
         self.circle.draw()
-        for shape in self.triangles_list:
+        for shape in self.square_list:
             shape.draw()
 
         # Call draw() on all your sprite lists below
@@ -54,8 +49,8 @@ class MyGame(arcade.Window):
             self.change_angle = self.change_angle/2
 
         self.circle.update(delta_time, self.view_left, self.view_bottom)
-        for t in self.triangles_list:
-            t.update(delta_time, self.change_angle, self.view_left, self.view_bottom)
+        for s in self.square_list:
+            s.update(delta_time, self.change_angle, self.view_left, self.view_bottom)
         
         arcade.set_viewport(self.view_left,
                             self.view_left + win.WIDTH,
@@ -99,7 +94,6 @@ def main():
     game = MyGame(win.WIDTH, win.HEIGHT)
     game.setup()
     arcade.run()
-
 
 if __name__ == "__main__":
     main()

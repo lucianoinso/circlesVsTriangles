@@ -1,5 +1,6 @@
 import arcade
-from helper import *
+import win
+
 
 class Triangle:
     def __init__(self, x, y):
@@ -15,16 +16,13 @@ class Triangle:
         self.p1 = (self.x - w_half, self.y - h_half)
         self.p2 = (self.x, self.y + h_half)
         self.p3 = (self.x + w_half, self.y - h_half)
-        
-        #self.element = newShapeElement(self.shape)
-    
+            
     def setup(self):
         pass
 
     def update(self, delta_time, angle, left, bottom):
         self.a += 3
-        self.x, self.y = arcade.rotate_point(self.x, self.y, CENTER_W + left, CENTER_H + bottom, angle)
-        #import ipdb; ipdb.set_trace()
+        self.x, self.y = arcade.rotate_point(self.x, self.y, win.CENTER_W + left, win.CENTER_H + bottom, angle)
 
     def draw(self):
         arcade.draw_rectangle_filled(self.x, self.y, self.w, self.h, self.color, self.a)

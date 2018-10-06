@@ -8,10 +8,9 @@ If Python and Arcade are installed, this example can be run from the command lin
 python -m arcade.examples.starting_template
 """
 import arcade
-from circle import Circle
+from circle import Circle, Shot
 from triangles import Triangle
 from helper import *
-
 
 
 class MyGame(arcade.Window):
@@ -94,6 +93,8 @@ class MyGame(arcade.Window):
             self.change_bottom = 8
         elif key == arcade.key.DOWN:
             self.change_bottom = -8
+        elif key == arcade.key.SPACE:
+            self.circle.shoot()
 
     def on_key_release(self, key, key_modifiers):
         if key == arcade.key.LEFT:

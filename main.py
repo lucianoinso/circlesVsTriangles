@@ -1,4 +1,5 @@
 import arcade
+import random
 from circle import Circle, Shot
 from square import Square
 import win
@@ -6,7 +7,7 @@ import win
 class MyGame(arcade.Window):
 
     def __init__(self, width, height):
-        super().__init__(width, height, fullscreen=True)
+        super().__init__(width, height)
         arcade.set_background_color(arcade.color.BLACK)
         self.set_mouse_visible(False)
         self.set_exclusive_mouse(True)
@@ -16,6 +17,7 @@ class MyGame(arcade.Window):
         self.change_left = 0
         self.view_bottom = 0
         self.view_left = 0
+        self.frame_count = 0
         
         self.circle = Circle(win.CENTER_W, win.CENTER_H)
         self.square_list = []
@@ -45,12 +47,23 @@ class MyGame(arcade.Window):
         """
         self.view_bottom += self.change_bottom
         self.view_left += self.change_left
+        self.frame_count += 1
+
+        # Disminuir el giro de la camara exponencialmente
         if self.change_angle != 0:
             self.change_angle = self.change_angle/2
 
-        self.circle.update(delta_time, self.view_left, self.view_bottom)
-        for s in self.square_list:
-            s.update(delta_time, self.change_angle, self.view_left, self.view_bottom)
+        # Crear nuevos shapes
+        # Probabilidad 1 en 100
+        if random.randrange(100) == 0:
+            rx = random.randrange(self.view_left, self.view_left+win.WIDTH)
+            ry = random.randrange(self.view_bottom, self.view_bottom+win.HEIGHT)
+            square = Square(rx, ry)
+            self.square_list.append(square)
+
+        # Actualizar shapes
+        for s in self.square_list + [self.circle]:
+            s.update(delta_time, self)
         
         arcade.set_viewport(self.view_left,
                             self.view_left + win.WIDTH,

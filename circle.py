@@ -41,9 +41,9 @@ class Circle:
     def setup(self):
         pass
 
-    def update(self, delta_time, left, bottom):
-        self.x = win.CENTER_W + left
-        self.y = win.CENTER_H + bottom
+    def update(self, delta_time, main):
+        self.x = win.CENTER_W + main.view_left
+        self.y = win.CENTER_H + main.view_bottom
 
         for i in self.shoots:
             if(i.alive):

@@ -4,34 +4,33 @@ import win
 
 class Shot(arcade.Sprite):
     def __init__(self, x, y):
-        self.origX = x
-        self.origY = y
-        self.x = x
-        self.y = y
-        self.w = 4
-        self.h = 4
-        self.alive = True
+        super().__init__("sprites/shot_001.png")
+        self.center_x = x
+        self.center_y = y
+        self.orig_x = x
+        self.orig_y = y
         self.d = math.radians(90) # Direccion
-        self.color = arcade.color.BABY_BLUE
 
-    def is_alive(self):
-        return self.alive or not((self.y > self.origY + win.CENTER_H) or
-                                (self.y < self.origY - win.CENTER_H) or
-                                (self.x > self.origX + win.CENTER_W) or
-                                (self.x < self.origX - win.CENTER_W))
+    def is_out(self):
+        return ((self.center_y > self.orig_y + win.CENTER_H) or
+                (self.center_y < self.orig_y - win.CENTER_H) or
+                (self.center_x > self.orig_x + win.CENTER_W) or
+                (self.center_x < self.orig_x - win.CENTER_W))
 
     def update(self, delta_time, main):
         # Actualizar la direccion
         self.d += math.radians(main.change_angle)
 
         # Movimiento para mantenerse en el lugar
-        self.x, self.y = arcade.rotate_point(self.x, self.y,
-                                                win.CENTER_W + main.view_left,
-                                                win.CENTER_H + main.view_bottom,
-                                                main.change_angle)
+        self.center_x, self.center_y = arcade.rotate_point(self.center_x, self.center_y,
+                                                            win.CENTER_W + main.view_left,
+                                                            win.CENTER_H + main.view_bottom,
+                                                            main.change_angle)
         # Avanzar en linea recta
-        self.x += math.cos(self.d) * 5
-        self.y += math.sin(self.d) * 5
+        self.change_x = math.cos(self.d) * 10
+        self.change_y = math.sin(self.d) * 10
+
+        super().update()
 
         """ Special shot
                     if angle != 0:

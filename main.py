@@ -20,7 +20,8 @@ class MyGame(arcade.Window):
         self.frame_count = 0
         
         self.circle = Circle(win.CENTER_W, win.CENTER_H)
-        self.square_list = []
+        self.shot_list = arcade.SpriteList()
+        self.square_list = arcade.SpriteList()
         for i in range(0,3):
             square = Square(i*300+150, i*300+150)
             self.square_list.append(square)
@@ -34,8 +35,8 @@ class MyGame(arcade.Window):
         """
         arcade.start_render()
         self.circle.draw()
-        for shape in self.square_list:
-            shape.draw()
+        for s in self.square_list + self.shot_list + [self.circle]:
+            s.draw()
 
         # Call draw() on all your sprite lists below
 
@@ -60,11 +61,19 @@ class MyGame(arcade.Window):
             ry = random.randrange(self.view_bottom, self.view_bottom+win.HEIGHT)
             square = Square(rx, ry)
             self.square_list.append(square)
+        
+        for s in self.shot_list:
+            if arcade.geometry.check_for_collision_with_list(s, self.square_list):
+                c.alive = False
+                s.alive = False
+
+        # Quitar balas que estan fuera de la pantalla
+        self.shot_list = list(filter(lambda x: x.is_alive(), self.shot_list))
 
         # Actualizar shapes
-        for s in self.square_list + [self.circle]:
+        for s in self.square_list + self.shot_list + [self.circle]:
             s.update(delta_time, self)
-        
+
         arcade.set_viewport(self.view_left,
                             self.view_left + win.WIDTH,
                             self.view_bottom,
@@ -80,7 +89,8 @@ class MyGame(arcade.Window):
         elif key == arcade.key.DOWN:
             self.change_bottom = -8
         elif key == arcade.key.SPACE:
-            self.circle.shoot()
+            shot = Shot(self.circle.x, self.circle.y + self.circle.h + 4)
+            self.shot_list.append(shot)
 
     def on_key_release(self, key, key_modifiers):
         if key == arcade.key.LEFT:

@@ -3,7 +3,7 @@ import win
 import math
 
 
-class Square:
+class Square(arcade.Sprite):
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -33,7 +33,7 @@ class Square:
                                              main.change_angle)
         # Movimiento para alcanzar al circulo
         self.t += delta_time
-        if (self.t > 1): # seg
+        if (self.t > 0): # seg
             self.t = 0
             # Position the start at the enemy's current location
             start_x = self.x

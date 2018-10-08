@@ -67,6 +67,12 @@ class MyGame(arcade.Window):
             square = Square(rx, ry)
             self.square_list.append(square)
         
+        # Morir
+        squares = arcade.geometry.check_for_collision_with_list(self.circle, self.square_list)
+        if len(squares) > 0:
+            arcade.pause(2)
+            arcade.close_window()
+
         for s in self.shot_list:
             squares = arcade.geometry.check_for_collision_with_list(s, self.square_list)
             # Solo el primero
@@ -92,33 +98,37 @@ class MyGame(arcade.Window):
                             self.view_bottom + win.HEIGHT)
 
     def on_key_press(self, key, key_modifiers):
-        if key == arcade.key.LEFT:
+        if key == arcade.key.LEFT or key == arcade.key.A:
             self.change_left = -8
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.change_left = 8
-        elif key == arcade.key.UP:
+        elif key == arcade.key.UP or key == arcade.key.W:
             self.change_bottom = 8
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key == arcade.key.S:
             self.change_bottom = -8
         elif key == arcade.key.SPACE:
             shot = Shot(self.circle.center_x, self.circle.center_y)
             self.shot_list.append(shot)
+        elif key == arcade.key.Q or key == arcade.key.ESCAPE:
+            arcade.close_window()
 
     def on_key_release(self, key, key_modifiers):
-        if key == arcade.key.LEFT:
+        if key == arcade.key.LEFT or key == arcade.key.A:
             self.change_left = 0
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.change_left = 0
-        elif key == arcade.key.UP:
+        elif key == arcade.key.UP or key == arcade.key.W:
             self.change_bottom = 0
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key == arcade.key.S:
             self.change_bottom = 0
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         self.change_angle = delta_x
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        pass
+        if button == 1:
+            shot = Shot(self.circle.center_x, self.circle.center_y)
+            self.shot_list.append(shot)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         pass

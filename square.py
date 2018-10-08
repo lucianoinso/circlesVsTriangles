@@ -25,7 +25,7 @@ class Square(arcade.Sprite):
                                              main.change_angle)
         # Movimiento para alcanzar al circulo
         self.t += delta_time        
-        if (self.t > 5): # seg
+        if (self.t > 1): # seg
             self.t = 0
             # Position the start at the enemy's current location
             start_x = self.center_x
